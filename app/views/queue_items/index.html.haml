@@ -18,23 +18,21 @@
                 %th(width="15%") Genre
                 %th(width="15%") Remove
             %tbody
-              - @queue_items.each_with_index do |item, index|
+              - @queue_items.each do |item|
                 %tr
                   %td
                     %input.form-control(type="text" value="#{item.position}")
                   %td
-                    = link_to item.video.title, video_path(item.video)
+                    = link_to item.video_title, video_path(item.video)
                   %td
                     = button_to "Play", nil, class: "btn btn-default"
                   %td
-                    - if @ratings[index] == ""
-                      Rate this item
-                    - else
-                      = pluralize(@ratings[index], 'Star')
+                    = item.rating
                   %td
-                    Fix categories
+                    - item.genres.each do |genre| 
+                      = genre.name
                   %td
-                    = button_to "Play", nil, class: "btn btn-default"              
+                    = button_to "Play", nil, class: "btn btn-default"             
                   %td
                     = link_to "", method: :post do
                       %i.glyphicon.glyphicon-remove

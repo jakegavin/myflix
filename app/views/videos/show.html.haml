@@ -22,7 +22,7 @@
             = f.select :rating, [1,2,3,4,5].map { |num| [pluralize(num, 'Star'), num] }.unshift(["Select rating", nil]), label: "Rate this video"
         .row
           .col-sm-8
-            = f.text_area :review, rows: 6, label: "Write Review"
+            = f.text_area :text, rows: 6, label: "Write Review"
         .form-group.actions
           = f.submit "Submit", class: "btn"
           &nbsp;
