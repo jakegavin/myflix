@@ -49,5 +49,4 @@ describe QueueItem do
       expect(qi.genres).to eq([cat3, cat1, cat2])
     end
   end
-
 end

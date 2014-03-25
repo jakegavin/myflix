@@ -17,7 +17,9 @@ Myflix::Application.routes.draw do
   get 'logout', to: 'sessions#destroy'
 
   get 'queue', to: 'queue_items#index'
-  
+  post 'queue', to: 'queue_items#create'
+  resources :queue_items, only: [:destroy]
+
   root 'static_pages#front'
 
   get 'ui(/:action)', controller: 'ui'

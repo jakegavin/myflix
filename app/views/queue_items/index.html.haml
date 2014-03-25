@@ -32,8 +32,5 @@
                     - item.genres.each do |genre| 
                       = link_to genre.name, category_path(genre)
                   %td
-                    = button_to "Play", nil, class: "btn btn-default"             
-                  %td
-                    = link_to "", method: :post do
+                    = link_to item, method: :delete do
                       %i.glyphicon.glyphicon-remove
-          = button_to "Update Instant Queue", nil, class: "btn btn-default"
