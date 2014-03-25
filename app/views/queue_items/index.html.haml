@@ -30,7 +30,7 @@
                     = item.rating
                   %td
                     - item.genres.each do |genre| 
-                      = genre.name
+                      = link_to genre.name, category_path(genre)
                   %td
                     = button_to "Play", nil, class: "btn btn-default"             
                   %td

@@ -19,7 +19,7 @@ Video.create(title: "Futurama", description: "A pizza delivery boy awakens in th
 Video.create(title: "Monk", description: "Adrian Monk was a brilliant detective for the San Francisco Police Department until his wife, Trudy, was killed by a car bomb in a parking garage, which Monk then believed was intended for him.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
 Video.create(title: "Lost", description: "After their plane crashes on a deserted island, a diverse group of people must adapt to their new home and contend with the island's enigmatic forces.", small_cover_url: "/tmp/lost.jpg", large_cover_url: "/tmp/lost_large.jpg")
 Video.create(title: "Parks and Recreation", description: "In this droll comedy, an employee with a rural Parks and Recreation department is full of energy and good ideas but bogged down by bureaucracy.", small_cover_url: "/tmp/parks_and_recreation.jpg", large_cover_url: "/tmp/parks_and_recreation.jpg")
-Category.create(name: "Action & Adventure")
+Category.create(name: "Action")
 Category.create(name: "Comedy")
 Category.create(name: "Drama")
 Category.create(name: "Sci-Fi")

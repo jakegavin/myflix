@@ -10,10 +10,12 @@ describe QueueItemsController do
     end
     context "with authenticated user" do
       let(:user) { Fabricate(:user) }
+      let(:q1) { Fabricate(:queue_item, user: user) }
+      let(:q2) { Fabricate(:queue_item, user: user) }
       before { session[:user_id] = user.id }
       it "assigns the @queue_items variable" do
         get :index
-        expect(assigns(:queue_items)).not_to be_nil
+        expect(assigns(:queue_items)).to match_array([q1, q2])
       end 
     end
   end
