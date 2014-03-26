@@ -19,7 +19,7 @@ Video.create(title: "Futurama", description: "A pizza delivery boy awakens in th
 Video.create(title: "Monk", description: "Adrian Monk was a brilliant detective for the San Francisco Police Department until his wife, Trudy, was killed by a car bomb in a parking garage, which Monk then believed was intended for him.", small_cover_url: "/tmp/monk.jpg", large_cover_url: "/tmp/monk_large.jpg")
 Video.create(title: "Lost", description: "After their plane crashes on a deserted island, a diverse group of people must adapt to their new home and contend with the island's enigmatic forces.", small_cover_url: "/tmp/lost.jpg", large_cover_url: "/tmp/lost_large.jpg")
 Video.create(title: "Parks and Recreation", description: "In this droll comedy, an employee with a rural Parks and Recreation department is full of energy and good ideas but bogged down by bureaucracy.", small_cover_url: "/tmp/parks_and_recreation.jpg", large_cover_url: "/tmp/parks_and_recreation.jpg")
-Category.create(name: "Action & Adventure")
+Category.create(name: "Action")
 Category.create(name: "Comedy")
 Category.create(name: "Drama")
 Category.create(name: "Sci-Fi")
@@ -54,10 +54,11 @@ VideoCategory.create(category_id: 2, video_id: 10)
 VideoCategory.create(category_id: 3, video_id: 10)
 VideoCategory.create(category_id: 4, video_id: 10)
 50.times do 
-  Review.create(video_id: rand(Video.first.id..Video.last.id), user_id: rand(User.first.id..User.last.id), rating: rand(1..5), review: Faker::Lorem.paragraph)
+  Review.create(video_id: rand(Video.first.id..Video.last.id), user_id: rand(User.first.id..User.last.id), rating: rand(1..5), text: Faker::Lorem.paragraph)
 end
 User.all.each do |user|
+  video_ids = (Video.first.id..Video.last.id).to_a
   5.times do |index|
-    QueueItem.create(user_id: user.id, video_id: rand(Video.first.id..Video.last.id), position: index+1)
+    QueueItem.create(user_id: user.id, video_id: video_ids.delete_at(rand(video_ids.length)), position: index+1)
   end
 end
