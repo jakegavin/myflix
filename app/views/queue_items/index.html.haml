@@ -24,13 +24,12 @@
                     %td
                       = hidden_field_tag "queue_items[][id]", item.id
                       = text_field_tag "queue_items[][position]", item.position, class: "form-control"
-                      / %input.form-control(type="text" value="#{item.position}")
                     %td
                       = link_to item.video_title, video_path(item.video)
                     %td
                       = button_to "Play", nil, class: "btn btn-default"
                     %td
-                      = item.rating
+                      = select_tag "queue_items[][rating]", options_for_review_rating(item.rating), class: "form-control"
                     %td
                       - item.genres.each do |genre| 
                         = link_to genre.name, category_path(genre)

@@ -124,7 +124,7 @@ describe QueueItemsController do
         post :modify, queue_items: [{id:1, position: 1}]
         expect(response).to redirect_to queue_path
       end
-      context 'with invalid parameters' do
+      context 'with invalid parameters for position' do
         it "doesn't update the queue items order" do
           q1 = Fabricate(:queue_item, user: user, position: 1)
           q2 = Fabricate(:queue_item, user: user, position: 2)
@@ -149,7 +149,7 @@ describe QueueItemsController do
           expect(flash[:danger]).to_not be_nil
         end
       end
-      context 'with valid parameters' do 
+      context 'with valid parameters for position' do 
         it "updates the queue items' order if first item is moved into second place" do
           q1 = Fabricate(:queue_item, user: user, position: 1)
           q2 = Fabricate(:queue_item, user: user, position: 2)
@@ -174,6 +174,35 @@ describe QueueItemsController do
           post :modify, queue_items: [{id: 1, position: 2}, {id: 2, position: 1}]
           expect(q1.reload.position).to eq(1)
           expect(q2.reload.position).to eq(2)          
+        end
+      end
+      context 'altering the rating' do
+        it "creates a new review if the user hasn't already reviewed the video" do
+          video = Fabricate(:video)
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 3}]
+          expect(Review.all.count).to eq(1)
+        end
+        it "doesn't create a new review if a review already exists" do
+          video = Fabricate(:video)
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
+          expect(QueueItem.all.size).to eq(1)
+        end
+        it "changes the rating in the review if it already exists" do
+          video = Fabricate(:video)
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
+          expect(rev.reload.rating).to eq(5)
+        end
+        it "won't clears the rating if an empty rating is submitted and the review already exists" do
+          video = Fabricate(:video)
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]
+          expect(rev.reload.rating).to be_nil
         end
       end
     end

@@ -13,9 +13,10 @@ class QueueItemsController < ApplicationController
   def modify
     begin
       update_queue_items
-      current_user.normalize_queue_items
+      current_user.normalize_queue_items_positions
+      flash[:success] = "Your queue was updated."
     rescue => e
-      flash[:danger] = "Your position values were invalid."
+      flash[:danger] = "Your queue modifications were invalid."
     end
     redirect_to queue_path
   end
@@ -24,7 +25,7 @@ class QueueItemsController < ApplicationController
     queue_item = QueueItem.find(params[:id])
     if queue_item.user == current_user
       queue_item.destroy
-      current_user.normalize_queue_items
+      current_user.normalize_queue_items_positions
     end
     redirect_to queue_path
   end
@@ -43,10 +44,7 @@ class QueueItemsController < ApplicationController
     QueueItem.transaction do
       params[:queue_items].each do |item|
         qi = QueueItem.find(item[:id])
-        if qi.user == current_user
-          qi.position = item[:position]
-          qi.save!
-        end
+        qi.update_attributes!(position: item[:position], rating: item[:rating]) if qi.user == current_user
       end
     end
   end

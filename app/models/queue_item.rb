@@ -9,12 +9,25 @@ class QueueItem < ActiveRecord::Base
   delegate :title, to: :video, prefix: :video
 
   def rating
-    review = Review.where(user_id: user_id, video_id: video_id).order("created_at DESC").first
     return "" if review.nil?
     review.rating
   end
 
+  def rating=(new_rating)
+    new_rating = nil if new_rating == ""
+    if review
+      review.update_columns(rating: new_rating)
+    elsif !new_rating.nil?
+      new_review = Review.new(user: user, video: video, rating: new_rating)
+      new_review.save!(validate: false)
+    end
+  end
+
   def genres
     video.categories
+  end
+
+  def review
+    @review ||= Review.where(user_id: user_id, video_id: video_id).order("created_at DESC").first
   end
 end
