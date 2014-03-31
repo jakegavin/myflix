@@ -16,9 +16,10 @@ Myflix::Application.routes.draw do
   post 'login', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
 
+  resources :queue_items, only: [:destroy]
+  post 'modify_queue', to: 'queue_items#modify'
   get 'queue', to: 'queue_items#index'
   post 'queue', to: 'queue_items#create'
-  resources :queue_items, only: [:destroy]
 
   root 'static_pages#front'
 
