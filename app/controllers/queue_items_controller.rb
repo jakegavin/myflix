@@ -10,11 +10,22 @@ class QueueItemsController < ApplicationController
     redirect_to queue_path
   end
 
+  def modify
+    begin
+      update_queue_items
+      current_user.normalize_queue_items_positions
+      flash[:success] = "Your queue was updated."
+    rescue => e
+      flash[:danger] = "Your queue modifications were invalid."
+    end
+    redirect_to queue_path
+  end
+
   def destroy
     queue_item = QueueItem.find(params[:id])
     if queue_item.user == current_user
-      decrease_following_item_positions(queue_item)
       queue_item.destroy
+      current_user.normalize_queue_items_positions
     end
     redirect_to queue_path
   end
@@ -29,15 +40,12 @@ class QueueItemsController < ApplicationController
     !QueueItem.where(user: current_user, video_id: video_id).empty?
   end
 
-  def decrease_following_item_positions(queue_item)
-    index = current_user.queue_items.find_index(queue_item)
-    unless current_user.queue_items[-1] == queue_item
-      current_user.queue_items[index+1..-1].each do |item|
-        item.position -= 1
-        item.save
-      end  
+  def update_queue_items
+    QueueItem.transaction do
+      params[:queue_items].each do |item|
+        qi = QueueItem.find(item[:id])
+        qi.update_attributes!(position: item[:position], rating: item[:rating]) if qi.user == current_user
+      end
     end
-    
   end
-
 end

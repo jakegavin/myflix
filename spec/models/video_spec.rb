@@ -92,5 +92,15 @@ describe Video do
       rev3 = Fabricate(:review, video: video, rating: 1)
       expect(video.average_rating).to eq(2.7)
     end
+
+    it "shouldn't count reviews with null rating" do
+      video = Fabricate(:video)
+      rev1 = Fabricate(:review, video: video, rating: 4)
+      rev2 = Fabricate(:review, video: video, rating: 3)
+      rev3 = Fabricate(:review, video: video, rating: 4)
+      rev4 = Fabricate(:review, video: video, rating: 1)
+      rev3.update_column(:rating, nil)
+      expect(video.average_rating).to eq(2.7)
+    end
   end
 end

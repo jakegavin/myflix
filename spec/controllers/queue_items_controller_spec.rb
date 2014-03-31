@@ -60,7 +60,7 @@ describe QueueItemsController do
       it "doesn't add the item if its already in the queue" do
         Fabricate(:queue_item, video: video, user: user, position: 1)
         post :create, video_id: video.id
-        expect(QueueItem.all.count).to eq(1)        
+        expect(QueueItem.all.count).to eq(1)
       end
     end
   end
@@ -103,6 +103,111 @@ describe QueueItemsController do
         qi = Fabricate(:queue_item, user: user)
         delete :destroy, id: qi.id
         expect(response).to redirect_to queue_path
+      end
+    end
+  end
+
+  describe 'POST #modify' do 
+    context 'with unauthenticated user' do
+      it 'redirects to the root_path' do
+        post :modify
+        expect(response).to redirect_to root_path
+      end
+    end
+    context 'with authenticated user' do
+      let (:user) { Fabricate(:user) }
+      before do
+        session[:user_id] = user.id
+      end
+      it 'redirects to the queue path' do
+         q1 = Fabricate(:queue_item, user: user, position: 1)
+        post :modify, queue_items: [{id:1, position: 1}]
+        expect(response).to redirect_to queue_path
+      end
+      context 'with invalid parameters for position' do
+        it "doesn't update the queue items order" do
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          q2 = Fabricate(:queue_item, user: user, position: 2)
+          q3 = Fabricate(:queue_item, user: user, position: 3)
+          post :modify, queue_items: [{id: 1, position: 2.5}, {id: 2, position: 1}, {id: 3, position: 3}]
+          expect(user.queue_items).to eq([q1, q2, q3])
+        end
+        it "doesn't change the queue items' position" do 
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          q2 = Fabricate(:queue_item, user: user, position: 2)
+          q3 = Fabricate(:queue_item, user: user, position: 3)
+          post :modify, queue_items: [{id: 1, position: 2.5}, {id: 2, position: 1}, {id: 3, position: 3}]
+          expect(q1.reload.position).to eq(1)
+          expect(q2.reload.position).to eq(2)
+          expect(q3.reload.position).to eq(3)
+        end
+        it "sets the flash danger alert" do
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          q2 = Fabricate(:queue_item, user: user, position: 2)
+          q3 = Fabricate(:queue_item, user: user, position: 3)
+          post :modify, queue_items: [{id: 1, position: 2.5}, {id: 2, position: 1}, {id: 3, position: 3}]
+          expect(flash[:danger]).to_not be_nil
+        end
+      end
+      context 'with valid parameters for position' do 
+        it "updates the queue items' order if first item is moved into second place" do
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          q2 = Fabricate(:queue_item, user: user, position: 2)
+          q3 = Fabricate(:queue_item, user: user, position: 3)
+          post :modify, queue_items: [{id: 1, position: 2}, {id: 2, position: 1}, {id: 3, position: 3}]
+          expect(user.queue_items).to eq([q2, q1, q3])
+        end
+        it "updates the queue items positions so they start with 1" do
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          q2 = Fabricate(:queue_item, user: user, position: 2)
+          q3 = Fabricate(:queue_item, user: user, position: 3)
+          post :modify, queue_items: [{id: 1, position: 4}, {id: 2, position: 2}, {id: 3, position: 3}]
+          expect(q1.reload.position).to eq(3)
+          expect(q2.reload.position).to eq(1)
+          expect(q3.reload.position).to eq(2)
+        end
+      end
+      context 'user does not own the queue_item' do 
+        it "does not change the queue items' position" do
+          q1 = Fabricate(:queue_item, position: 1)
+          q2 = Fabricate(:queue_item, position: 2)
+          post :modify, queue_items: [{id: 1, position: 2}, {id: 2, position: 1}]
+          expect(q1.reload.position).to eq(1)
+          expect(q2.reload.position).to eq(2)          
+        end
+      end
+      context 'altering the rating' do
+        let (:video) { Fabricate(:video) }
+        it "creates a new review if the user hasn't already reviewed the video" do
+          q1 = Fabricate(:queue_item, user: user, position: 1)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 3}]
+          expect(Review.all.count).to eq(1)
+        end
+        it "doesn't create a new review if a review already exists" do
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
+          expect(QueueItem.all.size).to eq(1)
+        end
+        it "changes the rating in the review if it already exists" do
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
+          expect(rev.reload.rating).to eq(5)
+        end
+        it "clears the rating if an empty rating is submitted and the review (with text) already exists" do
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]
+          expect(rev.reload.rating).to be_nil
+        end
+        it "deletes the review if an empty rating is submitted and the existing review has nil text" do
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          rev.update_column(:text, nil)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]
+          expect(Review.all.size).to eq(0)
+        end
       end
     end
   end
