@@ -195,11 +195,18 @@ describe QueueItemsController do
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
           expect(rev.reload.rating).to eq(5)
         end
-        it "won't clears the rating if an empty rating is submitted and the review already exists" do
+        it "clears the rating if an empty rating is submitted and the review (with text) already exists" do
           q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
           rev = Fabricate(:review, video: video, user: user, rating: 3)
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]
           expect(rev.reload.rating).to be_nil
+        end
+        it "deletes the review if an empty rating is submitted and the existing review has nil text" do
+          q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
+          rev = Fabricate(:review, video: video, user: user, rating: 3)
+          rev.update_column(:text, nil)
+          post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]
+          expect(Review.all.size).to eq(0)
         end
       end
     end

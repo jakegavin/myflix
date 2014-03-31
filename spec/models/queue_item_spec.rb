@@ -90,5 +90,12 @@ describe QueueItem do
       qi.save
       expect(Review.all.size).to eq(0)
     end
+    it "deletes the review if the rating is nil and the text of the existing review is nil" do
+      rev = Fabricate(:review, user: user, video: video, rating: 3)
+      rev.update_column(:text, nil)
+      qi.rating = nil
+      qi.save
+      expect(Review.all.size).to eq(0)
+    end
   end
 end
