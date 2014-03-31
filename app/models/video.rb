@@ -13,7 +13,7 @@ class Video < ActiveRecord::Base
 
   def average_rating
     return 'N/A' if reviews.empty?
-    sum = reviews.reload.inject(0) { |memo, review| memo + review.rating }
+    sum = reviews.reload.inject(0) { |memo, review| memo + (review.rating.nil? ? 2.5 : review.rating) }
     (sum.to_f / reviews.size.to_f).round(1)
   end
 
