@@ -177,28 +177,25 @@ describe QueueItemsController do
         end
       end
       context 'altering the rating' do
+        let (:video) { Fabricate(:video) }
         it "creates a new review if the user hasn't already reviewed the video" do
-          video = Fabricate(:video)
           q1 = Fabricate(:queue_item, user: user, position: 1)
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 3}]
           expect(Review.all.count).to eq(1)
         end
         it "doesn't create a new review if a review already exists" do
-          video = Fabricate(:video)
           q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
           rev = Fabricate(:review, video: video, user: user, rating: 3)
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
           expect(QueueItem.all.size).to eq(1)
         end
         it "changes the rating in the review if it already exists" do
-          video = Fabricate(:video)
           q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
           rev = Fabricate(:review, video: video, user: user, rating: 3)
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: 5}]
           expect(rev.reload.rating).to eq(5)
         end
         it "won't clears the rating if an empty rating is submitted and the review already exists" do
-          video = Fabricate(:video)
           q1 = Fabricate(:queue_item, user: user, video: video, position: 1)
           rev = Fabricate(:review, video: video, user: user, rating: 3)
           post :modify, queue_items: [{id: 1, user: user, video: video, position: 1, rating: ""}]

@@ -54,8 +54,8 @@ describe QueueItem do
   describe '#rating=' do
     let(:user) { Fabricate(:user) }
     let(:video) { Fabricate(:video) }
+    let(:qi) { Fabricate(:queue_item, user: user, video: video) }
     it "creates a new review if the user hasn't already created a review for the video" do
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = 3
       qi.save
       expect(Review.all.count).to eq(1)
@@ -63,34 +63,29 @@ describe QueueItem do
     end
     it "doesn't create a new review if the user has already created a review for the video" do
       rev = Fabricate(:review, user: user, video: video, rating: 3)
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = 5
       qi.save
       expect(Review.all.count).to eq(1)
     end
     it "updates the old review if the user has already created a review for the video" do
       rev = Fabricate(:review, user: user, video: video, rating: 3)
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = 5
       qi.save
       expect(Review.first.rating).to eq(5)
     end
     it "sets the rating to nil if passed an empty string and the review already exists" do
       rev = Fabricate(:review, user: user, video: video, rating: 3)
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = ""
       qi.save
       expect(Review.first.rating).to be_nil
     end
     it "sets the rating to nil if passed nil and the review already exists" do
       rev = Fabricate(:review, user: user, video: video, rating: 3)
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = nil
       qi.save
       expect(Review.first.rating).to be_nil
     end
     it "doesn't create a new review if passed nil and the user hasn't created already review" do
-      qi = Fabricate(:queue_item, user: user, video: video)
       qi.rating = nil
       qi.save
       expect(Review.all.size).to eq(0)
