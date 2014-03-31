@@ -7,4 +7,11 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
   validates :name, presence: true
   validates :password, length: { minimum: 5 }, on: :create
+
+  def normalize_queue_items
+    queue_items.each_with_index do |item, i|
+      item.position = i+1
+      item.save!
+    end
+  end
 end
