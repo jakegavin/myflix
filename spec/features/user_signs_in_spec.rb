@@ -8,7 +8,7 @@ feature 'user signs in' do
     visit login_path
     fill_in "Email Address", with: "testing@gmail.com"
     fill_in "Password", with: "testing"
-    click_button "Sign In"
+    click_button "Sign in"
     expect(page).to have_text "Welcome, Test User"
   end
 end
