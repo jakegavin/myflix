@@ -1,20 +1,16 @@
 require 'spec_helper'
 
 describe ReviewsController do
-  let (:video) { Fabricate(:video) }
-  context "with unauthenticated user" do 
-    describe "POST #create" do
-      it "redirects to root_path" do
-        post :create, video_id: video.id
-        expect(response).to redirect_to root_path
-      end
+  describe "POST #create" do
+    let (:video) { Fabricate(:video) }
+    it_behaves_like "requires authenticated user" do
+      let(:action) { post :create, video_id: video.id }
     end
-  end
 
-  context "with authenticated user" do
-    let(:user) { Fabricate(:user) }
-    before { session[:user_id] = user.id }
-    describe "POST #create" do
+    context "with authenticated user" do
+      before { set_current_user }
+      let(:user) { current_user }
+    
       it "sets the @video variable" do
         post :create, video_id: video.id, review: Fabricate.attributes_for(:review, video: nil, user: nil)
         expect(assigns(:video)).to eq(video)
@@ -53,5 +49,4 @@ describe ReviewsController do
       end
     end
   end
-
 end
