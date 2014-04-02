@@ -23,13 +23,13 @@
                   %tr
                     %td
                       = hidden_field_tag "queue_items[][id]", item.id
-                      = text_field_tag "queue_items[][position]", item.position, class: "form-control", id: "item_#{index}_position"
+                      = text_field_tag "queue_items[][position]", item.position, class: "form-control", data: { pos_video_id: item.video.id}
                     %td
                       = link_to item.video_title, video_path(item.video), id: "item_#{index}_title"
                     %td
                       = button_to "Play", nil, class: "btn btn-default"
                     %td
-                      = select_tag "queue_items[][rating]", options_for_review_rating(item.rating), class: "form-control", id: "item_#{index}_rating"
+                      = select_tag "queue_items[][rating]", options_for_review_rating(item.rating), class: "form-control"
                     %td
                       - item.genres.each do |genre| 
                         = link_to genre.name, category_path(genre)
