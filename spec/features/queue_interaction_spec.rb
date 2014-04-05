@@ -53,7 +53,7 @@ feature "Queue interaction" do
     end
   end
 
-  def fill_in_video_position(video, position) do
+  def fill_in_video_position(video, position)
     find("input[data-pos-video-id='#{video.id}']").set(position)
   end
 
