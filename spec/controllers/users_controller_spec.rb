@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
   context "with authenticated user" do
-    before { session[:user_id] = Fabricate(:user).id}
+    before { set_current_user }
     describe "GET #new" do
       it "redirects to home path" do
         get :new

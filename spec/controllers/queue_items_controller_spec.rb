@@ -2,17 +2,14 @@ require 'spec_helper'
 
 describe QueueItemsController do
   describe "GET #index" do
-    context "with unauthenticated user" do
-      it "redirects to root_path" do
-        get :index
-        expect(response).to redirect_to root_path
-      end
+    it_behaves_like "requires authenticated user" do
+      let(:action) { get :index }
     end
     context "with authenticated user" do
-      let(:user) { Fabricate(:user) }
       let(:q1) { Fabricate(:queue_item, user: user) }
       let(:q2) { Fabricate(:queue_item, user: user) }
-      before { session[:user_id] = user.id }
+      before { set_current_user }
+      let(:user) { current_user }
       it "assigns the @queue_items variable" do
         get :index
         expect(assigns(:queue_items)).to match_array([q1, q2])
@@ -21,18 +18,13 @@ describe QueueItemsController do
   end
 
   describe 'POST #create' do
-    context "with unauthenticated user" do
-      it "redirects to the root_path" do
-        post :create, video_id: 1 
-        expect(response).to redirect_to root_path
-      end
+    it_behaves_like "requires authenticated user" do
+      let(:action) { post :create, video_id: 1 }
     end
     context "with authenticated user" do
-      let(:user) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
-      before do 
-        session[:user_id] = user.id
-      end
+      before { set_current_user }
+      let(:user) { current_user }
       it "redirects to the queue_path" do
         post :create, video_id: video.id
         expect(response).to redirect_to queue_path
@@ -66,19 +58,16 @@ describe QueueItemsController do
   end
 
   describe 'DELETE #destroy' do
-    context "with unauthenticated user" do
-      it "redirects to the root_path" do
+    it_behaves_like "requires authenticated user" do
+      let(:action) do
         qi = Fabricate(:queue_item)
         delete :destroy, id: qi.id
-        expect(response).to redirect_to root_path
       end
     end
     context "with authenticated user" do
-      let(:user) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
-      before do 
-        session[:user_id] = user.id
-      end
+      before { set_current_user }
+      let(:user) { current_user }
       it "deletes the queue item" do
         qi = Fabricate(:queue_item, user: user)
         delete :destroy, id: qi.id
@@ -108,17 +97,12 @@ describe QueueItemsController do
   end
 
   describe 'POST #modify' do 
-    context 'with unauthenticated user' do
-      it 'redirects to the root_path' do
-        post :modify
-        expect(response).to redirect_to root_path
-      end
-    end
+    it_behaves_like "requires authenticated user" do
+      let(:action) { post :modify }
+    end  
     context 'with authenticated user' do
-      let (:user) { Fabricate(:user) }
-      before do
-        session[:user_id] = user.id
-      end
+      before { set_current_user }
+      let (:user) { current_user }
       it 'redirects to the queue path' do
          q1 = Fabricate(:queue_item, user: user, position: 1)
         post :modify, queue_items: [{id:1, position: 1}]

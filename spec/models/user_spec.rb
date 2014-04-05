@@ -56,4 +56,16 @@ describe User do
       end
     end
   end
+
+  describe "#queued_video?"
+    let(:user) { Fabricate(:user) }
+    let(:video) { Fabricate(:video) }
+    it "is true if the user has the video in their queue" do
+      Fabricate(:queue_item, user: user, video: video)
+      expect(user.queued_video?(video)).to be true
+    end
+    it "is false if the user does not have the video in their queue" do
+      Fabricate(:queue_item, video: video)
+      expect(user.queued_video?(video)).to be false
+    end
 end

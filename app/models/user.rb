@@ -14,4 +14,8 @@ class User < ActiveRecord::Base
       item.save!
     end
   end
+
+  def queued_video?(video)
+    queue_items.map(&:video).include?(video)
+  end
 end
