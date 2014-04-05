@@ -55,11 +55,28 @@ describe UsersController do
   end
   describe "GET #show" do
    it_behaves_like "requires authenticated user" do
-
+      let(:action) { get :show, id: 1 }
     end
 
     context 'with authenticated user' do
-
+      let(:shown_user) { Fabricate(:user) }
+      before do
+        3.times do
+          Fabricate(:review, user: shown_user)
+          Fabricate(:queue_item, user: shown_user)
+        end
+        set_current_user
+        get :show, id: shown_user.id
+      end
+      it 'assigns the @variable to the correct user' do
+        expect(assigns(:user)).to eq(shown_user)
+      end
+      it 'assigns an array of the users reviews to @reviews' do
+        expect(assigns(:reviews)).to match_array shown_user.reviews
+      end
+      it 'assigns an array of the users queue items to @queue_items' do
+        expect(assigns(:queue_items)).to match_array shown_user.queue_items
+      end
     end
   end
 end

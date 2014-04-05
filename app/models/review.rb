@@ -4,4 +4,6 @@ class Review < ActiveRecord::Base
 
   validates_presence_of :user_id, :video_id, :rating, :text
 
+  delegate :title, to: :video, prefix: :video
+  
 end
