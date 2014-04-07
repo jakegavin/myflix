@@ -19,7 +19,7 @@ feature 'Social networking' do
     expect(page).to have_text bob.name
 
     unfollow(bob)
-    expect(page).to_not have_text "You are no longer following #{bob.name}."
+    expect(page).to have_text "You are no longer following #{bob.name}."
   end
 
   def follow_user_from_video_page(user)

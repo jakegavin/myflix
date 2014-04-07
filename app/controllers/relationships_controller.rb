@@ -15,7 +15,7 @@ class RelationshipsController < ApplicationController
   def destroy
     @relationship = Relationship.find(params[:id])
     if @relationship.user == current_user
-      flash[:success] = "You are no longer following #{@relationship.followed_user.name}"
+      flash[:success] = "You are no longer following #{@relationship.followed_user.name}."
       @relationship.destroy
     else
       flash[:danger] = "There was an error with your request."
