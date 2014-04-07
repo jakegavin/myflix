@@ -17,3 +17,8 @@ def sign_in(a_user=nil)
   fill_in "Password", with: user.password
   click_button "Sign in"
 end
+
+def click_on_video_from_home_page(video)
+  visit home_path
+  find(:xpath, "//a/img[@src='#{video.small_cover_url}']/ancestor::a[1]").click
+end
