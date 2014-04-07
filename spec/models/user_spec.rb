@@ -3,6 +3,8 @@ require 'spec_helper'
 describe User do
   it { should have_many(:reviews).order("created_at DESC") }
   it { should have_many(:queue_items) }
+  it { should have_many(:followed_users) }
+  it { should have_many(:followers) }
   
   describe "::reviews" do
     it "should return an empty array if user has no reviews" do
@@ -57,7 +59,7 @@ describe User do
     end
   end
 
-  describe "#queued_video?"
+  describe "#queued_video?" do
     let(:user) { Fabricate(:user) }
     let(:video) { Fabricate(:video) }
     it "is true if the user has the video in their queue" do
@@ -68,4 +70,50 @@ describe User do
       Fabricate(:queue_item, video: video)
       expect(user.queued_video?(video)).to be false
     end
+  end
+
+  describe "#followed_users" do
+    it "returns the accounts followed by the user" do
+      follow_me = Fabricate(:user)
+      user = Fabricate(:user)
+      Fabricate(:relationship, user: user, followed_user: follow_me)
+      expect(user.followed_users).to match_array [follow_me]
+    end
+  end
+  
+  describe "#followers" do
+    it "returns the accounts that follow the user" do
+      follow_me = Fabricate(:user)
+      user = Fabricate(:user)
+      Fabricate(:relationship, user: user, followed_user: follow_me)
+      expect(follow_me.followers).to match_array [user]
+    end
+  end
+
+  describe "#follows?" do
+    let(:user) { Fabricate(:user) }
+    let(:followed_user) { Fabricate(:user) }
+    it 'is true if the user follows the user passed in the argument' do
+      Fabricate(:relationship, user: user, followed_user: followed_user)
+      expect(user.follows?(followed_user)).to be_true
+    end
+    it 'is false if the user does not follow the user passed in the argument' do
+      expect(user.follows?(followed_user)).to be_false
+    end
+  end
+
+  describe "#can_follow?" do
+    let(:user) { Fabricate(:user) }
+    let(:followed_user) { Fabricate(:user) }
+    it 'is true if the user can follow the user in the argument' do
+      expect(user.can_follow?(followed_user)).to be_true
+    end
+    it 'is false if the user in the argument is the user itself' do
+      expect(user.can_follow?(user)).to be_false
+    end
+    it 'is false if the use already follows the user in the argument' do
+      Fabricate(:relationship, user: user, followed_user: followed_user)
+      expect(user.can_follow?(followed_user)).to be_false
+    end
+  end
 end

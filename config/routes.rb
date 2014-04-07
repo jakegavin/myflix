@@ -21,6 +21,9 @@ Myflix::Application.routes.draw do
   get 'queue', to: 'queue_items#index'
   post 'queue', to: 'queue_items#create'
 
+  resources :relationships, only: [:create, :destroy]
+  get 'following', to: 'relationships#index'
+
   root 'static_pages#front'
 
   get 'ui(/:action)', controller: 'ui'
