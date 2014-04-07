@@ -53,13 +53,12 @@ feature "Queue interaction" do
     end
   end
 
-  def fill_in_video_position(video, position) do
+  def fill_in_video_position(video, position)
     find("input[data-pos-video-id='#{video.id}']").set(position)
   end
 
   def add_video_to_queue(video)
-    visit home_path
-    find(:xpath, "//a/img[@src='#{video.small_cover_url}']/ancestor::a[1]").click
+    click_on_video_from_home_page(video)
     click_link "+ My Queue"
   end
 

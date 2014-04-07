@@ -10,7 +10,7 @@ Myflix::Application.routes.draw do
 
   resources :categories, only: [:show]
 
-  resources :users, only: [:create]
+  resources :users, only: [:create, :show]
   get 'register', to: 'users#new'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
@@ -20,6 +20,9 @@ Myflix::Application.routes.draw do
   post 'modify_queue', to: 'queue_items#modify'
   get 'queue', to: 'queue_items#index'
   post 'queue', to: 'queue_items#create'
+
+  resources :relationships, only: [:create, :destroy]
+  get 'following', to: 'relationships#index'
 
   root 'static_pages#front'
 

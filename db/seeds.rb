@@ -62,3 +62,8 @@ User.all.each do |user|
     QueueItem.create(user_id: user.id, video_id: video_ids.delete_at(rand(video_ids.length)), position: index+1)
   end
 end
+
+Relationship.create(user: User.first, followed_user: User.find(2))
+Relationship.create(user: User.first, followed_user: User.find(3))
+Relationship.create(user: User.find(3), followed_user: User.find(1))
+Relationship.create(user: User.find(3), followed_user: User.find(2))
