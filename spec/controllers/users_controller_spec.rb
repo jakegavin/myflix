@@ -51,6 +51,30 @@ describe UsersController do
           expect(response).to render_template(:new)
         end
       end
+      context "email sending" do
+        after { ActionMailer::Base.deliveries.clear }
+        context 'with valid attributes' do
+          before { post :create, user: Fabricate.attributes_for(:user) }
+          it 'sends an email' do
+            expect(ActionMailer::Base.deliveries).to_not be_empty
+          end
+          it 'sends the email to the correct address' do
+            email = ActionMailer::Base.deliveries.last
+            expect(email.to).to eq([User.last.email])
+          end
+          it 'sends the email with the right content' do
+            email = ActionMailer::Base.deliveries.last
+            expect(email.body).to include("Hi #{User.last.name}")
+            expect(email.body).to include("You successfully registered for Myflix.")
+          end
+        end
+        context 'with invalid attributes' do
+          before { post :create, user: Fabricate.attributes_for(:user, name: nil) }
+          it 'does not send an email' do
+            expect(ActionMailer::Base.deliveries).to be_empty
+          end
+        end
+      end
     end
   end
   describe "GET #show" do
