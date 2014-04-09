@@ -9,8 +9,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:notice] = "Your account was created."
+      flash[:success] = "Your account was created."
       session[:user_id] = @user.id
+      AppMailer.welcome_email(@user).deliver
       redirect_to home_path
     else
       render :new
