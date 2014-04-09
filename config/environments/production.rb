@@ -19,6 +19,7 @@ Myflix::Application.configure do
   config.active_support.deprecation = :notify
 
   # Configure ActionMailer
+  config.action_mailer.default_url_options = { host: 'jake-myflix.herokuapp.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
