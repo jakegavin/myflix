@@ -1,14 +1,7 @@
 %section.reset_password.container
   .row
     .col-sm-10.col-sm-offset-1
-      / / = bootstrap_form_for(@user, url: '/reset_password', method: :post) do |f|
-      /   %header
-      /     %h1 Reset Your Password
-      /   .col-sm-5
-      /     = f.hidden_field :password_reset_token, value: @user.password_reset_token
-      /     = f.password_field :password, label: 'New Password'
-      /     = f.submit 'Reset Password'
-      = form_for '/reset_password' do
+      = form_for reset_passwords do
         %header
           %h1 Reset Your Password
         .form-group
