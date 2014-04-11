@@ -16,6 +16,12 @@ Myflix::Application.routes.draw do
   post 'login', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
 
+  resources :forgot_passwords, only: [:create]
+  get 'forgot_password', to: 'forgot_passwords#new'
+  get 'password_reset_confirmation', to: 'forgot_passwords#password_reset_confirmation'
+  resources :reset_passwords, only: [:show, :create]
+  get 'invalid_token', to: 'reset_passwords#invalid_token'
+  
   resources :queue_items, only: [:destroy]
   post 'modify_queue', to: 'queue_items#modify'
   get 'queue', to: 'queue_items#index'

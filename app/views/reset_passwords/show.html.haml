@@ -1,0 +1,14 @@
+%section.reset_password.container
+  .row
+    .col-sm-10.col-sm-offset-1
+      = form_for reset_passwords do
+        %header
+          %h1 Reset Your Password
+        .form-group
+          = hidden_field_tag 'password_reset_token', @user.password_reset_token
+          = label_tag :password, 'New Password'
+          .row
+            .col-sm-5
+              = password_field_tag :password, nil, class: 'form-control'
+        .form-group.action
+          = submit_tag 'Reset Password', class: 'btn btn-default'
