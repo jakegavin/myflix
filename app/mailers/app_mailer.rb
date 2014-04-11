@@ -6,4 +6,10 @@ class AppMailer < ActionMailer::Base
     email_with_name = "#{@user.name} <#{@user.email}>"
     mail(to: email_with_name, subject: 'Welcome to Myflix' )
   end
+
+  def reset_password_link_email(user)
+    @user = user
+    email_with_name = "#{@user.name} <#{@user.email}>"
+    mail(to: email_with_name, subject: 'Myflix: Password reset request')
+  end
 end
