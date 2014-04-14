@@ -10,7 +10,7 @@ class ResetPasswordsController < ApplicationController
     @user = User.find_by(password_reset_token: params[:password_reset_token]) unless params[:password_reset_token].nil?
     if @user
       @user.update(password: params[:password], password_reset_token: nil)
-      flash[:success] = "Your password was updated"
+      flash[:success] = "Your password was updated."
       redirect_to login_path
     else
       redirect_to invalid_token_path 
