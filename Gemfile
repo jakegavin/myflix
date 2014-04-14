@@ -4,7 +4,7 @@ ruby '2.0.0'
 gem 'bootstrap-sass'
 gem 'bootstrap_form', github: 'bootstrap-ruby/rails-bootstrap-forms'
 gem 'coffee-rails'
-gem 'rails'
+gem 'rails', '4.0.0'
 gem 'haml-rails'
 gem 'sass-rails'
 gem 'uglifier'
@@ -35,5 +35,6 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'capybara-email'
   gem 'launchy'
 end
