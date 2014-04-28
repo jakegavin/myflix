@@ -7,8 +7,7 @@ class ForgotPasswordsController < ApplicationController
   def create
     user = User.find_by(email: params[:email])
     if user
-      user.password_reset_token = SecureRandom.urlsafe_base64
-      user.save
+      user.generate_token!
       AppMailer.reset_password_link_email(user).deliver
       redirect_to password_reset_confirmation_path
     else

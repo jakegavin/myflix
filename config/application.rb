@@ -16,6 +16,8 @@ module Myflix
       g.template_engine :haml
     end
 
+    config.autoload_paths << "#{Rails.root}/lib"
+
     # Load Environment Files
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')

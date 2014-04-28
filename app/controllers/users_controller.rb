@@ -4,12 +4,12 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @invite = Invite.find_by(invite_token: params[:invite_token])
+    @invite = Invite.find_by(token: params[:token])
   end
 
   def create
     @user = User.new(user_params)
-    @invite = Invite.find_by(invite_token: params[:invite_token])
+    @invite = Invite.find_by(token: params[:token])
     if @user.save
       create_relationships(@user, @invite) if @invite
       delete_invites(@user)

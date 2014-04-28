@@ -9,6 +9,10 @@ describe Invite do
 
   it 'should generate a token when created' do
     new_invite = Fabricate(:invite)
-    expect(new_invite.reload.invite_token).to_not be_nil
+    expect(new_invite.reload.token).to_not be_nil
+  end
+
+  it_behaves_like 'tokenable' do
+    let(:object) { Fabricate(:invite) }
   end
 end

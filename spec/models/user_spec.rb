@@ -6,6 +6,10 @@ describe User do
   it { should have_many(:followed_users) }
   it { should have_many(:followers) }
   it { should have_many(:invites) }
+
+  it_behaves_like 'tokenable' do
+    let(:object) { Fabricate(:user) }
+  end
   
   describe "::reviews" do
     it "should return an empty array if user has no reviews" do

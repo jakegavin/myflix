@@ -11,7 +11,7 @@ Myflix::Application.routes.draw do
   resources :categories, only: [:show]
 
   resources :users, only: [:create, :show]
-  get '/register(/:invite_token)', to: 'users#new', as: 'register'
+  get '/register(/:token)', to: 'users#new', as: 'register'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'

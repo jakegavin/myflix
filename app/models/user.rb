@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Tokenable
+
   has_many :reviews, -> { order("created_at DESC")}
   has_many :queue_items, -> { order("position ASC, created_at DESC")}
 

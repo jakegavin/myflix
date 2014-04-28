@@ -5,7 +5,7 @@
         %header
           %h1 Reset Your Password
         .form-group
-          = hidden_field_tag 'password_reset_token', @user.password_reset_token
+          = hidden_field_tag 'token', @user.token
           = label_tag :password, 'New Password'
           .row
             .col-sm-5

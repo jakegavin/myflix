@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418162452) do
+ActiveRecord::Schema.define(version: 20140428223221) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20140418162452) do
     t.string   "name"
     t.string   "email"
     t.text     "message"
-    t.string   "invite_token"
+    t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20140418162452) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "password_reset_token"
+    t.string   "token"
   end
 
   create_table "video_categories", force: true do |t|

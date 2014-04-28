@@ -38,19 +38,19 @@ describe ForgotPasswordsController do
           expect(flash[:danger]).to_not be_nil
         end
         it "does not set a password reset token" do
-          expect(User.first.password_reset_token).to be_nil
+          expect(User.first.token).to be_nil
         end
       end
       context "with valid email address" do
         let!(:alice) { Fabricate(:user) }
         before { post :create, email: alice.email }
         after { ActionMailer::Base.deliveries.clear }
-        it "it sets the password_reset_token column for the associated user" do
-          expect(User.last.password_reset_token).to_not be_nil
+        it "it sets the token column for the associated user" do
+          expect(User.last.token).to_not be_nil
         end
         it "sends an email with a link to the reset password page" do
           expect(ActionMailer::Base.deliveries.last.to).to eq([alice.email])
-          expect(ActionMailer::Base.deliveries.last.body).to include(User.last.password_reset_token)
+          expect(ActionMailer::Base.deliveries.last.body).to include(User.last.token)
         end
         it "redirects to password reset confirmation" do
           expect(response).to redirect_to password_reset_confirmation_path

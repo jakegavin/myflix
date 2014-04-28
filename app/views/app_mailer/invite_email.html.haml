@@ -5,5 +5,5 @@
     .p Your fried #{@sender.name} invited you to join Myflix.
     .p= @invite.message
     %br/
-    .p Sign up by #{link_to 'clicking here', register_url(@invite.invite_token)} or entering the following url into your browser: 
-    .p= url_for register_url(@invite.invite_token)
+    .p Sign up by #{link_to 'clicking here', register_url(@invite.token)} or entering the following url into your browser: 
+    .p= url_for register_url(@invite.token)
