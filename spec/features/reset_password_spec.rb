@@ -16,6 +16,8 @@ feature "Reset password" do
     expect(page).to have_text "Sign in"
 
     verify_sign_in_with_user_and_password(bob, new_password)
+
+    clear_emails
   end
 
   private
