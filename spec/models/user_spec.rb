@@ -5,6 +5,7 @@ describe User do
   it { should have_many(:queue_items) }
   it { should have_many(:followed_users) }
   it { should have_many(:followers) }
+  it { should have_many(:invites) }
   
   describe "::reviews" do
     it "should return an empty array if user has no reviews" do

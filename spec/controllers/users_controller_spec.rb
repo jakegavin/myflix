@@ -10,10 +10,24 @@ describe UsersController do
       end
     end
     context "with unathenticated user" do
-      it "assigns a new User to @user" do 
+      it "assigns a new User to @user" do
         get :new
         expect(assigns(:user)).to be_new_record
         expect(assigns(:user)).to be_instance_of(User)
+      end
+      context 'with valid invite token' do
+        it 'assigns the invite variable' do
+          invite = Fabricate(:invite)
+          get :new, invite_token: invite.invite_token
+          expect(assigns(:invite)).to eq(Invite.find_by(invite_token: invite.invite_token))
+        end
+      end
+      context 'with invalid invite_token' do
+        it 'does not assign the invite variable' do
+          invite = Fabricate(:invite)
+          get :new, invite_token: SecureRandom.urlsafe_base64
+          expect(assigns(:invite)).to be_nil
+        end
       end
     end
   end
@@ -27,6 +41,7 @@ describe UsersController do
     end
     context "with unathenticated user" do
       context "with valid attributes" do
+        after { ActionMailer::Base.deliveries.clear }
         before { post :create, user: Fabricate.attributes_for(:user) }
         it "saves the new user" do
           expect(User.count).to eq(1)
@@ -73,6 +88,32 @@ describe UsersController do
           it 'does not send an email' do
             expect(ActionMailer::Base.deliveries).to be_empty
           end
+        end
+      end
+      context 'with valid invite token' do
+        it 'assigns the invite variable' do
+          invite = Fabricate(:invite)
+          post :create, user: Fabricate.attributes_for(:user), invite_token: invite.invite_token
+          expect(assigns(:invite)).to eq(Invite.find_by(invite_token: invite.invite_token))
+        end
+        it 'creates a relationship where the new user follows the inviter' do
+          inviter = Fabricate(:user)
+          invite = Fabricate(:invite, inviter: inviter)
+          post :create, user: Fabricate.attributes_for(:user), invite_token: invite.invite_token
+          expect(User.last.followed_users).to eq([inviter])
+        end
+        it 'creates a relationship where the inviter follows the new user' do
+          inviter = Fabricate(:user)
+          invite = Fabricate(:invite, inviter: inviter)
+          post :create, user: Fabricate.attributes_for(:user), invite_token: invite.invite_token
+          expect(User.first.followed_users).to eq([User.last])
+        end
+        it 'deletes all invites associated with the new users email' do
+          new_email = Faker::Internet.email
+          3.times { Fabricate(:invite, email: new_email) }
+          Fabricate(:invite)
+          post :create, user: Fabricate.attributes_for(:user, email: new_email, invite_token: Invite.first.invite_token)
+          expect(Invite.all.size).to eq(1)
         end
       end
     end

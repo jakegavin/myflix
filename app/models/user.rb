@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   has_many :inverse_relationships, class_name: "Relationship", foreign_key: "followed_id"
   has_many :followers, through: :inverse_relationships, source: :user 
 
+  has_many :invites, foreign_key: 'inviter_id'
+
   has_secure_password validations: false
 
   validates :email, presence: true, uniqueness: true
