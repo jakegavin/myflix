@@ -4,13 +4,13 @@ describe UsersController do
   describe "GET #new" do
     context "with authenticated user" do
       before { set_current_user }
-      it "redirects to home path" do
+      it 'redirects to home path' do
         get :new
         expect(response).to redirect_to home_path
       end
     end
-    context "with unathenticated user" do
-      it "assigns a new User to @user" do
+    context 'with unathenticated user' do
+      it 'assigns a new User to @user' do
         get :new
         expect(assigns(:user)).to be_new_record
         expect(assigns(:user)).to be_instance_of(User)
@@ -32,41 +32,41 @@ describe UsersController do
     end
   end
   describe "POST #create" do
-    context "with authenticated user" do
+    context 'with authenticated user' do
       before { set_current_user }
-      it "redirects to home path" do
+      it 'redirects to home path' do
         post :create
         expect(response).to redirect_to home_path
       end
     end
-    context "with unathenticated user" do
-      context "with valid attributes" do
+    context 'with unathenticated user' do
+      context 'with valid attributes' do
         after { ActionMailer::Base.deliveries.clear }
         before { post :create, user: Fabricate.attributes_for(:user) }
-        it "saves the new user" do
+        it 'saves the new user' do
           expect(User.count).to eq(1)
         end
-        it "redirects to the home path" do
+        it 'redirects to the home path' do
           expect(response).to redirect_to home_path
         end
-        it "logs the user in" do
+        it 'logs the user in' do
           expect(session[:user_id]).to be_true
         end
       end
-      context "with invald attributes" do
+      context 'with invald attributes' do
         before { post :create, user: Fabricate.attributes_for(:user, name: nil) }
-        it "sets the @user variable" do
+        it 'sets the @user variable' do
           expect(assigns(:user)).to be_new_record
           expect(assigns(:user)).to be_instance_of(User)
         end
-        it "does not save the new user" do 
+        it 'does not save the new user' do 
           expect(User.count).to eq(0)
         end
-        it "re-renders the :new template" do
+        it 're-renders the :new template' do
           expect(response).to render_template(:new)
         end
       end
-      context "email sending" do
+      context 'email sending' do
         after { ActionMailer::Base.deliveries.clear }
         context 'with valid attributes' do
           before { post :create, user: Fabricate.attributes_for(:user) }
