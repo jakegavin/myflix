@@ -10,7 +10,7 @@ class InvitesController < ApplicationController
     @invite.inviter = current_user
     if @invite.save
       flash[:success] = "Invite sent to #{@invite.name} <#{@invite.email}>"
-      AppMailer.invite_email(current_user, @invite).deliver
+      AppMailer.delay.invite_email(current_user, @invite)
       redirect_to home_path
     else
       render :new
