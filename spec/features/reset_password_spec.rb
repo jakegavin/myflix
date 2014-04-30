@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Reset password" do
   let!(:bob) { Fabricate(:user, name: "Bob", email: "bob@gmail.com") }
   scenario "reset password and signs in with new password" do
-
+    
     send_reset_password_email(bob.email)
 
     open_email(bob.email)
@@ -31,6 +31,7 @@ feature "Reset password" do
     fill_in "Email Address", with: email
     click_button "Send Email"
   end
+
 
   def verify_sign_in_with_user_and_password(user, password)
     visit login_path
