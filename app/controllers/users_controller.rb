@@ -4,11 +4,15 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @invite = Invite.find_by(token: params[:token])
   end
 
   def create
     @user = User.new(user_params)
+    @invite = Invite.find_by(token: params[:token])
     if @user.save
+      create_relationships(@user, @invite) if @invite
+      delete_invites(@user)
       flash[:success] = "Your account was created."
       session[:user_id] = @user.id
       AppMailer.welcome_email(@user).deliver
@@ -28,5 +32,17 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password)
+  end
+
+  def create_relationships(user, invite)
+    Relationship.create(user: user, followed_user: invite.inviter)
+    Relationship.create(user: invite.inviter, followed_user: user)
+  end
+
+  def delete_invites(user)
+    invites = Invite.where(email: user.email)
+    invites.each do |invite|
+      invite.destroy
+    end
   end
 end
