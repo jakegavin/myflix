@@ -16,6 +16,7 @@ gem 'unicorn'
 
 gem 'sentry-raven'
 gem 'paratrooper'
+gem 'letter_opener_web', '~> 1.2.0'
 
 group :development do
   gem 'sqlite3'
