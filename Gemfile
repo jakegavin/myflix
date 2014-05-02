@@ -11,6 +11,17 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
 
+gem 'sidekiq'
+gem 'unicorn'
+
+gem 'sentry-raven'
+gem 'paratrooper'
+
+group :development, :staging do
+  gem 'letter_opener_web', '~> 1.2.0'
+  gem 'letter_opener'
+end
+
 group :development do
   gem 'sqlite3'
   gem 'pry'
@@ -18,10 +29,9 @@ group :development do
   gem 'thin'
   gem "better_errors"
   gem "binding_of_caller"
-  gem 'letter_opener'
 end
 
-group :production do
+group :production, :staging do
   gem 'pg'
   gem 'rails_12factor'
 end

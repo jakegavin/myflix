@@ -35,5 +35,9 @@ Myflix::Application.routes.draw do
 
   root 'static_pages#front'
 
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   get 'ui(/:action)', controller: 'ui'
 end

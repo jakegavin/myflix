@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'sidekiq/testing'
+Sidekiq::Testing.inline!
 
 feature 'invites' do
   given!(:frank) { User.create(name: "Frank", email: "frank@gmail.com", password: "frank") }
