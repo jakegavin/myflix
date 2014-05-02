@@ -10,9 +10,12 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
+
 gem 'sidekiq'
 gem 'unicorn'
+
 gem 'sentry-raven'
+gem 'paratrooper'
 
 group :development do
   gem 'sqlite3'
