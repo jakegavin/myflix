@@ -21,7 +21,7 @@ class AppMailer < ActionMailer::Base
 
   def email_with_name
     if Rails.env.staging?
-      return "Myflix Staging Email #{ENV['STAGING_EMAIL_RECIPIENT']}"
+      return "Myflix Staging Email <#{ENV['STAGING_EMAIL_RECIPIENT']}>"
     else
       return "#{@invite.name} <#{@invite.email}>"
     end
