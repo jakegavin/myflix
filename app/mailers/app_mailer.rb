@@ -3,7 +3,7 @@ class AppMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user = user
-=    mail(to: email_with_name, subject: 'Welcome to Myflix' )
+    mail(to: email_with_name, subject: 'Welcome to Myflix' )
   end
 
   def reset_password_link_email(user)
