@@ -1,5 +1,4 @@
-class InvitesController < ApplicationController
-  before_action :require_user
+class InvitesController < AuthenticatedUserController
 
   def new
     @invite = Invite.new
