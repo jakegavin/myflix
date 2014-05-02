@@ -17,7 +17,7 @@ gem 'unicorn'
 gem 'sentry-raven'
 gem 'paratrooper'
 
-group :development, :staging
+group :development, :staging do
   gem 'letter_opener_web', '~> 1.2.0'
   gem 'letter_opener'
 end
