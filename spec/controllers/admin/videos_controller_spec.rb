@@ -6,7 +6,7 @@ describe Admin::VideosController do
       let(:action) { get :new }
     end
     it 'assigns the @video variable' do
-      set_current_user(Fabricate(:user, admin: true))
+      set_current_user(Fabricate(:admin))
       get :new
       expect(assigns(:video)).to be_instance_of(Video)
       expect(assigns(:video)).to be_new_record
@@ -18,8 +18,7 @@ describe Admin::VideosController do
       let(:action) { post :create, video: Fabricate.attributes_for(:video) }
     end
     context 'with admin' do
-      let(:bob) { Fabricate(:user, admin: true) }
-      before { set_current_user(bob) }
+      before { set_current_user(Fabricate(:admin)) }
       context 'general tests' do
         before { post :create, video: Fabricate.attributes_for(:video) }
         it 'sets the @video variable' do
