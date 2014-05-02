@@ -12,6 +12,7 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby'
 gem 'sidekiq'
 gem 'unicorn'
+gem 'sentry-raven'
 
 group :development do
   gem 'sqlite3'
