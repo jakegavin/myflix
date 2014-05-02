@@ -16,7 +16,11 @@ gem 'unicorn'
 
 gem 'sentry-raven'
 gem 'paratrooper'
-gem 'letter_opener_web', '~> 1.2.0'
+
+group :development, :staging
+  gem 'letter_opener_web', '~> 1.2.0'
+  gem 'letter_opener'
+end
 
 group :development do
   gem 'sqlite3'
@@ -28,7 +32,7 @@ group :development do
   gem 'letter_opener'
 end
 
-group :production do
+group :production, staging do
   gem 'pg'
   gem 'rails_12factor'
 end
