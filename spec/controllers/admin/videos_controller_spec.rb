@@ -24,12 +24,6 @@ describe Admin::VideosController do
         it 'sets the @video variable' do
           expect(assigns(:video)).to be_instance_of(Video)
         end
-        it 'sets the small cover url to be an empty string if no image uploaded' do
-          expect(Video.first.small_cover_url).to eq("")
-        end
-        it 'sets the large cover url to be an empty string if no image uploaded' do
-          expect(Video.first.large_cover_url).to eq("")
-        end
       end
       context 'with valid attributes' do
         before { post :create, video: Fabricate.attributes_for(:video) }
