@@ -5,8 +5,6 @@ class Admin::VideosController < AdminController
 
   def create
     @video = Video.new(video_params)
-    @video.small_cover_url = "" if @video.small_cover_url.nil?
-    @video.large_cover_url = "" if @video.large_cover_url.nil?
     if @video.save
       flash[:success] = "#{@video.title} was added to the system."
       redirect_to home_path
@@ -18,6 +16,6 @@ class Admin::VideosController < AdminController
   private
 
   def video_params
-    params.require(:video).permit(:title, :description, category_ids: [])
+    params.require(:video).permit(:title, :description, :large_cover, :small_cover, category_ids: [])
   end
 end
