@@ -5,6 +5,10 @@ class LargeCoverUploader < CarrierWave::Uploader::Base
   process :resize_to_fill => [665, 375]
 
   def store_dir
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    if Rails.env.test? or Rails.env.cucumber?
+      "uploads/testing"
+    else
+      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    end
   end
 end
