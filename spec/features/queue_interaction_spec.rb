@@ -2,9 +2,9 @@ require 'spec_helper'
 
 feature "Queue interaction" do
 
-  given!(:south_park) { Fabricate(:video, title: "South Park", categories: [Fabricate(:category)], small_cover_url: "/tmp/sp.jpg", description: "An ongoing narrative revolving around four boys—Stan Marsh, Kyle Broflovski, Eric Cartman, and Kenny McCormick—and their bizarre adventures in and around the titular Colorado town." ) }
-  given!(:futurama) { Fabricate(:video, title: "Futurama", categories: [Fabricate(:category)], description: "A pizza delivery boy awakens in the 31st century after 1,000 years of cryogenic preservation and finds a job at an interplanetary delivery service.", small_cover_url: "/tmp/futurama.jpg") }
-  given!(:archer) { Fabricate(:video, title: "Archer", categories: [Fabricate(:category)], description: "Sophisticated spy Archer may have the coolest gadgets, but he still has issues when it comes to dealing with his boss -- who also is his mother.", small_cover_url: "/tmp/archer.jpg") }
+  given!(:south_park) { Fabricate(:video, title: "South Park", categories: [Fabricate(:category)], description: "An ongoing narrative revolving around four boys—Stan Marsh, Kyle Broflovski, Eric Cartman, and Kenny McCormick—and their bizarre adventures in and around the titular Colorado town." ) }
+  given!(:futurama) { Fabricate(:video, title: "Futurama", categories: [Fabricate(:category)], description: "A pizza delivery boy awakens in the 31st century after 1,000 years of cryogenic preservation and finds a job at an interplanetary delivery service.") }
+  given!(:archer) { Fabricate(:video, title: "Archer", categories: [Fabricate(:category)], description: "Sophisticated spy Archer may have the coolest gadgets, but he still has issues when it comes to dealing with his boss -- who also is his mother.") }
   given!(:jake) { Fabricate(:user, name: "Jake Gavin", email: "jakegavin@gmail.com", password: "jakegavin") }
 
   scenario "User adds and reorders queue items" do
