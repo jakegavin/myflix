@@ -10,9 +10,10 @@
               %a(href="") Add a New Video
           %br
           = f.text_field :title
-          = f.collection_check_boxes :category_ids, Category.all, :id, :name do |cb|
+          = f.collection_check_boxes :category_ids, Category.all, :id, :name, label: 'Categories' do |cb|
             - cb.label(class: 'checkbox-inline') {cb.check_box(class: 'checkbox') + cb.text}
           = f.text_area :description, rows: 8
           = f.file_field :large_cover, class: 'form-control'
           = f.file_field :small_cover, class: 'form-control'
+          = f.text_field :url, label: 'Video URL'
           = f.submit 'Add Video'
