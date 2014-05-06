@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @invite = Invite.find_by(token: params[:token])
     if @user.save
-      charge_card(params[:stripeToken])
+      StripeWrapper::Charge.create(amount: 999, card: params[:stripeToken])
       create_relationships(@user, @invite) if @invite
       delete_invites(@user)
       flash[:success] = "Your account was created."
@@ -44,22 +44,6 @@ class UsersController < ApplicationController
     invites = Invite.where(email: user.email)
     invites.each do |invite|
       invite.destroy
-    end
-  end
-
-  def charge_card(token)
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-
-    # Create the charge on Stripe's servers - this will charge the user's card
-    begin
-      charge = Stripe::Charge.create(
-        :amount => 999, # amount in cents, again
-        :currency => "usd",
-        :card => token,
-        :description => "Myflix signup fee for #{@user.email}"
-      )
-    rescue Stripe::CardError => e
-      flash[:danger] = e.message
     end
   end
 end
