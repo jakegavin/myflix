@@ -3,27 +3,30 @@ class AppMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user = user
-    mail(to: email_with_name, subject: 'Welcome to Myflix' )
+    email_with_name = "#{@user.name} <#{@user.email}>"
+    mail(to: recipient_or_staging(email_with_name), subject: 'Welcome to Myflix' )
   end
 
   def reset_password_link_email(user)
     @user = user
-    mail(to: email_with_name, subject: 'Myflix: Password reset request')
+    email_with_name = "#{@user.name} <#{@user.email}>"    
+    mail(to: recipient_or_staging(email_with_name), subject: 'Myflix: Password reset request')
   end
 
   def invite_email(user, invite)
     @invite = invite
     @sender = user
-    mail(to: email_with_name, subject: "#{@sender.name} sent you a Myflix invitation")
+    email_with_name = "#{@invite.name} <#{@invite.email}>"
+    mail(to: recipient_or_staging(email_with_name), subject: "#{@sender.name} sent you a Myflix invitation")
   end
 
   private
 
-  def email_with_name
+  def recipient_or_staging(email)
     if Rails.env.staging?
       return "Myflix Staging Email <#{ENV['STAGING_EMAIL_RECIPIENT']}>"
     else
-      return "#{@invite.name} <#{@invite.email}>"
+      return email
     end
   end
 end

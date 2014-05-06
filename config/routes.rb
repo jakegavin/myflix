@@ -8,6 +8,10 @@ Myflix::Application.routes.draw do
   end  
   get 'home', to: 'videos#index'
 
+  namespace :admin do
+    resources :videos, only: [:new, :create]
+  end
+
   resources :categories, only: [:show]
 
   resources :users, only: [:create, :show]

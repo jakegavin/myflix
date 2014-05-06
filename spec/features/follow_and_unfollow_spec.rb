@@ -3,7 +3,7 @@ require 'spec_helper'
 feature 'Social networking' do
   given(:alice) { Fabricate(:user, name: 'Alice') }
   given(:bob) { Fabricate(:user, name: 'Bob') }
-  given(:archer) { Fabricate(:video, small_cover_url: "/tmp/archer.jpg") }
+  given(:archer) { Fabricate(:video) }
   background do
     Fabricate(:review, video: archer, user: bob)
   end

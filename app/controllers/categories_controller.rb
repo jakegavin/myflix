@@ -1,5 +1,4 @@
-class CategoriesController < ApplicationController
-  before_action :require_user
+class CategoriesController < AuthenticatedUserController
   
   def show
     @category = Category.find(params[:id])

@@ -11,11 +11,18 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
 
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog'
+
 gem 'sidekiq'
 gem 'unicorn'
 
 gem 'sentry-raven'
 gem 'paratrooper'
+
+gem 'figaro'
+gem 'stripe'
 
 group :development, :staging do
   gem 'letter_opener_web', '~> 1.2.0'
