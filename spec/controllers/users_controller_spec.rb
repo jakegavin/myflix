@@ -32,6 +32,11 @@ describe UsersController do
     end
   end
   describe "POST #create" do
+    before do
+      charge = double('charge')
+      allow(charge).to receive(:successful?).and_return(true)
+      allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
+    end
     context "with authenticated user" do
       before { set_current_user }
       it "redirects to home path" do
@@ -44,6 +49,7 @@ describe UsersController do
         after { ActionMailer::Base.deliveries.clear }
         before { post :create, user: Fabricate.attributes_for(:user) }
         it "saves the new user" do
+
           expect(User.count).to eq(1)
         end
         it "redirects to the home path" do
