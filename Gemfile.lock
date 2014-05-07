@@ -285,7 +285,7 @@ DEPENDENCIES
   capybara-email
   carrierwave
   coffee-rails
-  database_cleaner
+  database_cleaner (~> 1.2.0)
   fabrication
   faker
   figaro
