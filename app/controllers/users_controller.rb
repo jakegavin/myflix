@@ -10,14 +10,20 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @invite = Invite.find_by(token: params[:token])
-    if @user.save
-      StripeWrapper::Charge.create(amount: 999, card: params[:stripeToken])
-      create_relationships(@user, @invite) if @invite
-      delete_invites(@user)
-      flash[:success] = "Your account was created."
-      session[:user_id] = @user.id
-      AppMailer.welcome_email(@user).deliver
-      redirect_to home_path
+    if @user.valid?
+      charge = StripeWrapper::Charge.create(amount: 999, card: params[:stripeToken])
+      if charge.successful?
+        @user.save
+        create_relationships(@user, @invite) if @invite
+        delete_invites(@user)
+        flash[:success] = "Your account was created."
+        session[:user_id] = @user.id
+        AppMailer.welcome_email(@user).deliver
+        redirect_to home_path
+      else
+        flash[:danger] = charge.error_message
+        render :new
+      end
     else
       render :new
     end
