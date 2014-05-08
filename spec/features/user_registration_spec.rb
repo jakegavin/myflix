@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-feature 'User registration', { js: true } do    
-  scenario 'user has valid inputs', driver: :selenium do
+feature 'registration', { js: true, vcr: true}  do
+  scenario 'user has valid inputs' do
     visit register_path
     fill_in 'Full Name', with: 'Bob'
     fill_in 'Email Address', with: 'bob@gmail.com'
@@ -13,10 +13,5 @@ feature 'User registration', { js: true } do
     select '2017', from: 'date_year'
 
     click_button 'Sign Up'
-    expect(page).to have_text 'Welcome'
   end
-  # scenario 'user has invalid user attributes and valid credit card'
-  # scenario 'user has valid user attributes and invalid credit card'
-  # scenario 'user has valid attributes but credit card is declined'
 end
-
