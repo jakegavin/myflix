@@ -13,7 +13,7 @@ feature 'User registration', { js: true } do
     select '2017', from: 'date_year'
 
     click_button 'Sign Up'
-    expect(page).to have_text 'Welcome'
+    expect(page).to have_text 'Welcome, Bob'
   end
   # scenario 'user has invalid user attributes and valid credit card'
   # scenario 'user has valid user attributes and invalid credit card'
