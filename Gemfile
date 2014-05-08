@@ -57,5 +57,6 @@ group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'selenium-webdriver'
+  gem 'capybara-webkit'
   gem 'database_cleaner', "~> 1.2.0"
 end
