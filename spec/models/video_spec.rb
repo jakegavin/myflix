@@ -75,7 +75,7 @@ describe Video do
   describe "#average_rating" do
     it "should return 'N/A' if there are no ratings" do
       video = Fabricate(:video)
-      expect(video.average_rating).to eq('N/A')
+      expect(video.average_rating).to be_nil
     end
     it "should return the average if there are many ratings" do
       video = Fabricate(:video)

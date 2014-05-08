@@ -10,7 +10,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
-
+gem 'draper'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'fog'
