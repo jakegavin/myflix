@@ -3,11 +3,6 @@ require 'spec_helper'
 
 feature 'invites' do
   given!(:frank) { User.create(name: "Frank", email: "frank@gmail.com", password: "frank") }
-  # background do
-  #   charge = double('charge')
-  #   allow(charge).to receive(:successful?).and_return(true)
-  #   allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
-  # end
   scenario 'user invites a new user who then signs in', { js: true, vcr: true } do
     sign_in(frank)
 
