@@ -11,11 +11,14 @@
       = bootstrap_form_for(@user, layout: :horizontal, label_col: "col-sm-3", control_col: "col-sm-7", html: { id: 'payment-form'}) do |f|
         %header
           %h1 Register
-
         %fieldset
-          = hidden_field_tag :token, @invite.token if @invite
-          = f.text_field :name, label: "Full Name", value: (!!@invite ? "#{@invite.name}" : "")
-          = f.email_field :email, label: "Email Address", value: (!!@invite ? "#{@invite.email}" : "")
+          - if !!@invite
+            = hidden_field_tag :token, @invite.token
+            = f.text_field :name, label: "Full Name", value: "#{@invite.name}"
+            = f.email_field :email, label: "Email Address", value: "#{@invite.email}"
+          -else
+            = f.text_field :name, label: "Full Name"
+            = f.email_field :email, label: "Email Address"
           = f.password_field :password
         %fieldset.credit_card
           %span.payment-errors
@@ -26,7 +29,7 @@
           .form-group
             = label_tag :security_code, 'Security Code', class: 'control-label col-sm-3'
             .col-sm-6
-              = number_field_tag :security_code, nil, name: nil, class: 'form-control', data: {stripe: 'cvc'}
+              = text_field_tag :security_code, nil, name: nil, class: 'form-control', data: {stripe: 'cvc'}
           .form-group
             %label.control-label.col-sm-3 Expiration
             .col-sm-3

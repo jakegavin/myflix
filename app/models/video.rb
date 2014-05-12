@@ -16,7 +16,7 @@ class Video < ActiveRecord::Base
 
   def average_rating
     clean_reviews = reviews.reload.where('rating IS NOT NULL')
-    return 'N/A' if clean_reviews.empty?
+    return nil if clean_reviews.empty?
     ratings = clean_reviews.map(&:rating)
     (ratings.sum.to_f / clean_reviews.size.to_f).round(1)
   end

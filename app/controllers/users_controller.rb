@@ -10,15 +10,13 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @invite = Invite.find_by(token: params[:token])
-    if @user.save
-      charge_card(params[:stripeToken])
-      create_relationships(@user, @invite) if @invite
-      delete_invites(@user)
-      flash[:success] = "Your account was created."
+    creation = UserCreation.new(@user, @invite, params[:stripeToken]).create_and_charge_user
+    if creation.successful?
+      flash[:success] = creation.message
       session[:user_id] = @user.id
-      AppMailer.welcome_email(@user).deliver
       redirect_to home_path
     else
+      flash[:danger] = creation.message
       render :new
     end
   end
@@ -44,22 +42,6 @@ class UsersController < ApplicationController
     invites = Invite.where(email: user.email)
     invites.each do |invite|
       invite.destroy
-    end
-  end
-
-  def charge_card(token)
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-
-    # Create the charge on Stripe's servers - this will charge the user's card
-    begin
-      charge = Stripe::Charge.create(
-        :amount => 999, # amount in cents, again
-        :currency => "usd",
-        :card => token,
-        :description => "Myflix signup fee for #{@user.email}"
-      )
-    rescue Stripe::CardError => e
-      flash[:danger] = e.message
     end
   end
 end

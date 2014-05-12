@@ -1,8 +1,3 @@
-require 'spec_helper'
-require 'sidekiq/testing'
-Sidekiq::Testing.inline!
-
-
 describe InvitesController do
   describe 'GET #new' do
     it_behaves_like 'requires authenticated user' do

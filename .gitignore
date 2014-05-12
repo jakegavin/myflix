@@ -19,3 +19,6 @@
 # Ignore local environment configuration
 /config/local_env.yml
 /config/application.yml
+
+# Ignore vcr cassettes
+/spec/support/vcr_cassettes/

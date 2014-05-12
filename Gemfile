@@ -10,7 +10,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'bcrypt-ruby'
-
+gem 'draper'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'fog'
@@ -54,4 +54,9 @@ group :test do
   gem 'capybara'
   gem 'capybara-email'
   gem 'launchy'
+  gem 'vcr'
+  gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'capybara-webkit'
+  gem 'database_cleaner', "~> 1.2.0"
 end
