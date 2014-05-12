@@ -23,7 +23,6 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
@@ -47,7 +46,7 @@ RSpec.configure do |config|
 end
 
 VCR.configure do |c|
-  # c.default_cassette_options = { :record => :new_episodes, :erb => true }
+  c.default_cassette_options = { :record => :new_episodes, :erb => true }
   # c.allow_http_connections_when_no_cassette = true
   c.cassette_library_dir = 'spec/support/vcr_cassettes'
   c.hook_into :webmock

@@ -10,8 +10,9 @@ feature 'invites' do
     friend_email = Faker::Internet.email
     
     invite_friend(friend_name, friend_email)
+    click_link "Welcome, #{frank.name}"
+    click_link 'Sign Out'
 
-    visit logout_path
     expect(page).to have_text 'You have successfully logged out.'
 
     # open_email(friend_email)
@@ -27,7 +28,8 @@ feature 'invites' do
     click_link 'People'
     expect(page).to have_text frank.name
 
-    visit logout_path
+    click_link "Welcome, #{friend_name}"
+    click_link 'Sign Out'    
     expect(page).to have_text 'You have successfully logged out.'
 
     sign_in(frank)
