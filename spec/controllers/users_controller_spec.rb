@@ -43,21 +43,21 @@ describe UsersController do
     context 'with unauthenticated user' do
       context 'with valid attributes and valid payment' do
         before do
-          charge = double('charge')
-          allow(charge).to receive(:successful?).and_return(true)
-          expect(StripeWrapper::Charge).to receive(:create).and_return(charge)
+          creation = double('creation')
+          allow(creation).to receive(:successful?).and_return(true)
+          allow(creation).to receive(:create_and_charge_user) do
+            assigns(:user).save
+            creation
+          end
+          allow(UserCreation).to receive(:new).and_return(creation)
+          allow(creation).to receive(:message).and_return('Your card was declined.')
           post :create, user: Fabricate.attributes_for(:user)
-        end
-        it 'saves the new user' do
-          expect(User.all.count).to eq(1)
         end
         it 'redirects to the home path' do
           expect(response).to redirect_to home_path
         end
         it 'logs the user in' do
           expect(session[:user_id]).to be_true
-        end
-        it 'charges the user' do
         end
       end
       context 'with valid attributes and invalid payment' do
@@ -71,9 +71,6 @@ describe UsersController do
         it 'sets the @user variable' do
           expect(assigns(:user)).to be_new_record
           expect(assigns(:user)).to be_instance_of(User)
-        end
-        it 'does not save the new user' do 
-          expect(User.count).to eq(0)
         end
         it 're-renders the :new template' do
           expect(response).to render_template(:new)
@@ -89,14 +86,9 @@ describe UsersController do
           expect(StripeWrapper::Charge).to_not receive(:create)
           post :create, user: Fabricate.attributes_for(:user, name: nil)
         end
-        it 'does not charge the user' do
-        end
         it 'sets the @user variable' do
           expect(assigns(:user)).to be_new_record
           expect(assigns(:user)).to be_instance_of(User)
-        end
-        it 'does not save the new user' do 
-          expect(User.count).to eq(0)
         end
         it 're-renders the :new template' do
           expect(response).to render_template(:new)
@@ -166,7 +158,7 @@ describe UsersController do
       end
     end
   end
-  
+
   describe "GET #show" do
    it_behaves_like "requires authenticated user" do
       let(:action) { get :show, id: 1 }
