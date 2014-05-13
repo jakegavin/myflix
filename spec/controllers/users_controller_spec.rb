@@ -62,7 +62,7 @@ describe UsersController do
       end
       context 'with valid attributes and invalid payment' do
         before do
-          charge = double('charge')
+          charge = double('charge', id: 1)
           allow(charge).to receive(:successful?).and_return(false)
           allow(charge).to receive(:error_message).and_return('Your card was declined.')
           allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
@@ -81,7 +81,7 @@ describe UsersController do
       end
       context 'with invalid attirbutes' do
         before do
-          charge = double('charge')
+          charge = double('charge', id: 1)
           allow(charge).to receive(:successful?).and_return(true)
           expect(StripeWrapper::Charge).to_not receive(:create)
           post :create, user: Fabricate.attributes_for(:user, name: nil)
@@ -96,13 +96,13 @@ describe UsersController do
       end
       context 'allow charge' do
         before do
-          charge = double('charge')
+          charge = double('charge', id: 1)
           allow(charge).to receive(:successful?).and_return(true)
           allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
         end
         context 'email sending' do
           before do
-            charge = double('charge')
+            charge = double('charge', id: 1)
             allow(charge).to receive(:successful?).and_return(true)
             allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
           end

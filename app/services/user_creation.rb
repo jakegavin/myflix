@@ -8,8 +8,9 @@ class UserCreation
 
   def create_and_charge_user
     if user.valid?
-      charge = StripeWrapper::Charge.create(amount: 999, card: stripe_token)
+      charge = StripeWrapper::Charge.create(email: @user.email, card: stripe_token)
       if charge.successful?
+        user.stripe_id = charge.id 
         user.save
         create_relationships if invite
         delete_invites

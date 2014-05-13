@@ -5,7 +5,7 @@ describe UserCreation do
     after { ActionMailer::Base.deliveries.clear }
     context 'with valid attributes and valid payment' do
       before do
-        charge = double('charge')
+        charge = double('charge', id: 1)
         allow(charge).to receive(:successful?).and_return(true)
         allow(StripeWrapper::Charge).to receive(:create).and_return(charge)
       end
@@ -14,7 +14,7 @@ describe UserCreation do
         expect(User.all.size).to eq 1
       end
       it 'charges the user' do
-        charge = double('charge')
+        charge = double('charge', id: 1)
         allow(charge).to receive(:successful?).and_return(true)
         expect(StripeWrapper::Charge).to receive(:create).and_return(charge)
         UserCreation.new(Fabricate.build(:user)).create_and_charge_user
